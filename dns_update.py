@@ -1,31 +1,30 @@
-import json
 import os
 import requests
-from dotenv import load_dotenv
+from dotenv import load_dotenv, main
+from requests.models import Response
 
-load_dotenv()
+from update_cloudflare import create_cloudflare_request
+from update_linode import create_linode_request
 
-baseUrl: str  = 'https://api.linode.com/v4/domains'
-domainId: str = os.environ['DOMAIN_ID']
-recordId: str = os.environ['RECORD_ID']
+if __name__ == "__main__":
+    result = None
+    load_dotenv()
 
-url: str = f'{baseUrl}/{domainId}/records/{recordId}'
+    target = requests.get('https://api.ipify.org/').text
 
-auth: str = f"Bearer {os.environ['TOKEN']}"
-contentType: str = 'application/json'
-
-headers = {'Authorization': auth, 'Content-Type': contentType}
-
-target = requests.get('https://api.ipify.org/').text
-
-print(target)
-
-if target == '':
-    target = requests.get('https://ipv4.icanhazip.com/').text
     print(target)
 
-body = {'target': target}
+    if target == '':
+        target = requests.get('https://ipv4.icanhazip.com/').text
+        print(target)
 
-response = requests.put(url, data=json.dumps(body), headers=headers)
+    provider: str = os.environ["PROVIDER"].lower()
 
-print(response.content)
+    if provider == "linode":
+        result = create_linode_request(target)
+    elif provider == "cloudflare":
+        result = create_cloudflare_request(target)
+    else:
+        raise Exception(f'Invalid provider: {provider}')
+
+    print(result.content)
