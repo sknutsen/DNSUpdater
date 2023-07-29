@@ -4,6 +4,7 @@ from dotenv import load_dotenv, main
 from requests.models import Response
 
 from update_cloudflare import create_cloudflare_request
+from update_domeneshop import create_domeneshop_request
 from update_linode import create_linode_request
 
 if __name__ == "__main__":
@@ -20,11 +21,13 @@ if __name__ == "__main__":
 
     provider: str = os.environ["PROVIDER"].lower()
 
-    if provider == "linode":
-        result = create_linode_request(target)
-    elif provider == "cloudflare":
-        result = create_cloudflare_request(target)
-    else:
-        raise Exception(f'Invalid provider: {provider}')
+    providers = {
+        "linode": create_linode_request,
+        "cloudflare": create_cloudflare_request,
+        "domeneshop": create_domeneshop_request,
+    }
 
-    print(result.content)
+    result = providers[provider](target)
+
+    if result != None:
+        print(result.content)
