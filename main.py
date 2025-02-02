@@ -9,7 +9,7 @@ SERVICE = 1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--mode", type=int, default=SCRIPT)
+    parser.add_argument("-m", "--mode", type=int, default=SERVICE)
 
     args = parser.parse_args()
     mode = args.mode
