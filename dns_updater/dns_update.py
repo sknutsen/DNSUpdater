@@ -1,13 +1,12 @@
 import os
 import requests
-from dotenv import load_dotenv, main
-from requests.models import Response
+from dotenv import load_dotenv
 
-from update_cloudflare import create_cloudflare_request
-from update_domeneshop import create_domeneshop_request
-from update_linode import create_linode_request
+from .update_cloudflare import create_cloudflare_request
+from .update_domeneshop import create_domeneshop_request
+from .update_linode import create_linode_request
 
-if __name__ == "__main__":
+def update():
     result = None
     load_dotenv()
 

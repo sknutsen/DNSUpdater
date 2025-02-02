@@ -1,0 +1,11 @@
+version: '3'
+services:
+  base:
+    env_file: 
+      - .env
+
+  dns_updater:
+    extends:
+      service: base
+    build: .
+
