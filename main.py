@@ -15,8 +15,10 @@ if __name__ == "__main__":
     mode = args.mode
 
     if mode == SCRIPT:
+        print("running dns update...")
         update()
     elif mode == SERVICE:
+        print("starting dns updater service...")
         schedule.every().hour.at(":00").do(update)
 
         while True:
